@@ -1,3 +1,4 @@
 {
-    "julia.environmentPath": "e:\\juliatest\\jFvmCfd.jl"
+    "julia.environmentPath": "/home/limingtao/projects/jFvmCfd.jl",
+    terminal.integrated.sendKeybindingsToShell:true
 }

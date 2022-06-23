@@ -8,7 +8,7 @@ module jFvmCfd
 """
 module Mesh
 
-using StaticArrays
+using StaticArrays #我们要用到其SVector，
 
 """
 #参考 https://github.com/JuliaGeometry/Meshes.jl定义“点”
@@ -56,7 +56,7 @@ end
 
 #-------------------------------------------------------
 #
-# 这样的抽象类型是“骨架”
+# 这样的抽象类型是“骨架” 名字我们以后再考虑
 #
 #-------------------------------------------------------
 abstract type Geometry{Dim,T} end

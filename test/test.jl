@@ -3,24 +3,20 @@
 abstract type abstractScheme end
 struct divScheme <: abstractScheme end
 struct tranScheme <: abstractScheme end
-
-using SymbolicUtils
-
-@syms a::divScheme b::tranScheme
+struct ADDScheme <: abstractScheme 
+first
+second
+end
 
 import Base: +
 
-typeof(a)
-
-function (+)(a::SymbolicUtils.Sym{divScheme, Nothing}, b::SymbolicUtils.Sym{tranScheme, Nothing})
-    nothing
-    # 应该返回一个Term
-end
 
 c=divScheme()
 d=tranScheme()
 
-function (+)(a::divScheme, b::tranScheme)
-    -1
+function (+)(a::abstractScheme, b::abstractScheme)
+    ADDScheme(a,b)
     ## 应该返回一个Term
 end
+
+e=c+d

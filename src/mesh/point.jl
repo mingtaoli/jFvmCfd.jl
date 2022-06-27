@@ -7,11 +7,12 @@
 
 点可能是1维线上的点，也可能是2维平面上的点，也有可能是3维空间的点，我们这里Dim是一个维度参数
 """
-struct Point{Dim,T}
-  coords::SVector{Dim,T}
-  Point{Dim,T}(coords::SVector{Dim,T}) where {Dim,T} = new{Dim,T}(coords)
-  Point{Dim,T}(coords::SVector{Dim,T}) where {Dim,T<:Integer} = new{Dim,Float64}(coords)
+
+struct Point{dim,T} <: AbstractArray{T,1}
+  x::NTuple{dim, T}
 end
+
+
 
 
 """

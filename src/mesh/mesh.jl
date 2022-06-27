@@ -6,14 +6,74 @@ module Mesh
 
 using StaticArrays #我们要用到其SVector，
 
+using LinearAlgebra
+
+struct Point{dim,T} 
+    coords::Vector{T}
+    Point{Dim,T}(coords::Vector{T}) where {Dim,T} = new{Dim,T}(coords)
+    Point{Dim,T}(coords::Vector{T}) where {Dim,T<:Integer} = new{Dim,Float64}(coords)
+end
+
+
+Point(coords...) = Point(Vector{T}(coords...))
+"""
+从坐标构造点
+"""
+Point{Dim,T}(coords...) where {Dim,T} = Point{Dim,T}(Vector{T}(coords...))
+
+"""
+从SVector类型构造点
+"""
+Point(coords::SVector{Dim,T}) where {Dim,T} = Point{Dim,T}(coords)
+
+Point(coords::AbstractVector{T}) where {T} = Point{length(coords),T}(coords)
+
+function Point(coords...)
+
+    m=length(coords)
+
+    Vector{Float64}(tuple(coords),m)
+    
+    
+end
+"""
+坐标类型转换
+"""
+# coordinate type conversions
+Base.convert(::Type{Point{Dim,T}}, coords) where {Dim,T} = Point{Dim,T}(coords)
+Base.convert(::Type{Point{Dim,T}}, p::Point) where {Dim,T} = Point{Dim,T}(p.coords)
+Base.convert(::Type{Point}, coords) = Point{length(coords),eltype(coords)}(coords)
+
+"""
+命名一些别名方便使用
+"""
+const Point1D = Point{1,Float64}
+const Point2D = Point{2,Float64}
+const Point3D = Point{3,Float64}
+const Point1D32 = Point{1,Float32}
+const Point2D32 = Point{2,Float32}
+const Point3D32 = Point{3,Float32}
+
+
+
+
+struct Node{T}
+
+    coords::Vec{T}
+end
+
+
+
+
+# AbstractArray{dim,T<: Number}
 
 #-------------------------------------------------------
 #
 # 这样的抽象类型是“骨架” 名字我们以后再考虑
 #
-#-------------------------------------------------------
-abstract type Geometry{Dim,T} end
-abstract type Primitive{Dim,T} <: Geometry{Dim,T} end
+# -------------------------------------------------------
+# abstract type Geometry{Dim,T} end
+# abstract type Primitive{Dim,T} <: Geometry{Dim,T} end
 #-------------------------------------------------------
 
 # ------------------------------------------------------------------
@@ -64,37 +124,37 @@ abstract type abstractElement end
 
 abstract type Element{Dim} <: abstractElement end
 
-"""
-三角形
-"""
-struct Triangle <: Element{2}
-    #Vector{Point}
-end
+# """
+# 三角形
+# """
+# struct Triangle <: Element{2}
+#     #Vector{Point}
+# end
 
-"""
-四边形
-"""
-struct Tetragon <: Element{2}
-    #Vector{Point}
-end
+# """
+# 四边形
+# """
+# struct Tetragon <: Element{2}
+#     #Vector{Point}
+# end
 
-"""
-四面体
-"""
-struct Tetrahedron <: Element{3}
-    typename
-    nfaces
-    edges
-end
+# """
+# 四面体
+# """
+# struct Tetrahedron <: Element{3}
+#     typename
+#     nfaces
+#     edges
+# end
 
-"""
-六面体
-"""
-struct Hexahedron <: Element{3}
-    typename
-    nfaces
-    edges
-end
+# """
+# 六面体
+# """
+# struct Hexahedron <: Element{3}
+#     typename
+#     nfaces
+#     edges
+# end
 
 
 #在OpenFOAM中，或者SU2中，都是用cell来记录一个单元，并没有区分是四面体还是六面体
@@ -117,7 +177,7 @@ end
 
 # 参考以上这些定义，基本明确了如何定义一个cell(element)了。
 
-
+#Ferrite.jl也是要参考一下的
 
 struct mesh
     """

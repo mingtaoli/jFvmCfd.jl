@@ -1,11 +1,28 @@
 module jFvmCfd
 
+abstract type abstractMesh end
 
-#include("Mesh.jl")
-#using .Mesh
-#export Point,Point1D, Point2D, Point3D
+abstract type UnstructedMesh <: abstractMesh end
 
-function f(x)
-    x*2
+abstract type StructedMesh <: abstractMesh end
+
+abstract type controlDict end
+
+abstract type absctractTerm end
+
+# scalar vector tensor
+
+# variable
+
+# Scheme 格式
+
+struct Problem
+    mesh
+    variables
+    equations
+    boundary
+    initialcondition
 end
+
+
 end # module

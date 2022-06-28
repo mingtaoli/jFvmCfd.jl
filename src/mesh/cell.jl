@@ -1,3 +1,4 @@
+using StaticArrays: SVector
 abstract type AbstractCell end
 
 @enum CellShapeType begin
@@ -31,10 +32,10 @@ end
 # - 字段nodes记录单元的节点编号
 
 # """
-struct Cell{dim,NODES,FACES} <: AbstractCell
+struct Cell{dim} <: AbstractCell
 
-    nodelist::NTuple{NODES,Int} # list of Nodes
-    facelist::NTuple{FACES,Int} # list of faces
+    nodelist::SVector{Int} # list of Nodes
+    facelist::SVector{Int} # list of faces
     shapetype::CellShapeType
     celltype::CellType
 end

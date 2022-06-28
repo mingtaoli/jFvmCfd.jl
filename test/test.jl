@@ -13,12 +13,16 @@ struct MinusTerm <: abstractTerm
     second
 end
 
-import Base: +,-
+import Base: +,-,tan
 
 
 
 function (+)(a::abstractTerm, b::abstractTerm)
     ADDTerm(a,b)
+    ## 应该返回一个Term
+end
+function tan(a::abstractTerm, b::abstractTerm)
+    234
     ## 应该返回一个Term
 end
 

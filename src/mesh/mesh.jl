@@ -86,29 +86,43 @@ export Node, Node1D, Node2D, Node3D
 
 #Ferrite.jl也是要参考一下的
 
-struct mesh
+struct Grid
     """
+    Number of dimension of the problem
     网格的维度，1维，2维，3维
     """
-    nDimensions::Int64
+    nDim::Int
     """
+    Number of points of the mesh
     网格的点数
     """
     nPoints::Int64
-    """
-    网格的单元数
-    单元是指三角形、四边形，四面体、六面体
-    """
-    nElements::Int64
 
+    #nPointDomain::Int64
+    #nPointGhost::Int64
+    """
+    Number of elements of the mesh
+    网格的单元数
+    """
+    nElem::Int64
+    """
+    Number of edges of the mesh
+    网格的边数
+    """
+    nEdge::Int64
+    """
+    Number of faces of the mesh
+    网格的面数
+    """  
+    nFace::Int64
     """
     点数组points，记录有所有点的坐标，1维、2维和3维的，坐标是Float64的或者Float32的
     """
-    points::Vector{Point}
+    points::Vector{Node}
     """
     单元数组elements，记录有所有单元，是不是就是cell？
     """
-    elements::Vector{Element}
+    elements::Vector{Cell}
 
 
     #   edges
@@ -117,17 +131,3 @@ end
 
 
 end
-
-
-
-
-
-
-# include("line.jl")
-# include("plane.jl")
-
-# include("face.jl")
-
-
-# 看ENigMA，它有个CGeoVertexList类，就是给出所有点列的类，
-# 然后三角形、四边形等都是它的派生类

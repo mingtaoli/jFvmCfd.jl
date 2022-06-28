@@ -3,126 +3,33 @@
 """
 module Mesh
 
+using StaticArrays: SVector
 
-using StaticArrays #我们要用到其SVector，
+include("vector.jl")
 
-using LinearAlgebra
+include("node.jl")
 
-struct Point{dim,T} 
-    coords::Vector{T}
-    Point{Dim,T}(coords::Vector{T}) where {Dim,T} = new{Dim,T}(coords)
-    Point{Dim,T}(coords::Vector{T}) where {Dim,T<:Integer} = new{Dim,Float64}(coords)
-end
+include("cell.jl")
 
+export Node, Node1D, Node2D, Node3D
 
-Point(coords...) = Point(Vector{T}(coords...))
-"""
-从坐标构造点
-"""
-Point{Dim,T}(coords...) where {Dim,T} = Point{Dim,T}(Vector{T}(coords...))
+# struct Grid
+#     points::Vector{Node} # location of verties    
+#     cellid::C # node indices of elements
+#     cellType::D # inner/boundary cell
+#     cellNeighbors::C # neighboring cells id
+#     cellFaces::C # cell edges id
+#     cellCenter::B # cell center location
+#     cellArea::E # cell size
+#     cellNormals::F # unit normal vectors of cell
 
-"""
-从SVector类型构造点
-"""
-Point(coords::SVector{Dim,T}) where {Dim,T} = Point{Dim,T}(coords)
+#     facePoints::C # point ids affiliated to face
+#     faceCells::C # ids of neighbor cells
+#     faceCenter::B # center location of face
+#     faceType::D
+#     faceArea::E # face area
 
-Point(coords::AbstractVector{T}) where {T} = Point{length(coords),T}(coords)
-
-function Point(coords...)
-
-    m=length(coords)
-
-    Vector{Float64}(tuple(coords),m)
-    
-    
-end
-"""
-坐标类型转换
-"""
-# coordinate type conversions
-Base.convert(::Type{Point{Dim,T}}, coords) where {Dim,T} = Point{Dim,T}(coords)
-Base.convert(::Type{Point{Dim,T}}, p::Point) where {Dim,T} = Point{Dim,T}(p.coords)
-Base.convert(::Type{Point}, coords) = Point{length(coords),eltype(coords)}(coords)
-
-"""
-命名一些别名方便使用
-"""
-const Point1D = Point{1,Float64}
-const Point2D = Point{2,Float64}
-const Point3D = Point{3,Float64}
-const Point1D32 = Point{1,Float32}
-const Point2D32 = Point{2,Float32}
-const Point3D32 = Point{3,Float32}
-
-
-
-
-struct Node{T}
-
-    coords::Vec{T}
-end
-
-
-
-
-# AbstractArray{dim,T<: Number}
-
-#-------------------------------------------------------
-#
-# 这样的抽象类型是“骨架” 名字我们以后再考虑
-#
-# -------------------------------------------------------
-# abstract type Geometry{Dim,T} end
-# abstract type Primitive{Dim,T} <: Geometry{Dim,T} end
-#-------------------------------------------------------
-
-# ------------------------------------------------------------------
-# Licensed under the MIT License. See LICENSE in the project root.
-# ------------------------------------------------------------------
-
-"""
-    Vec{Dim,T}
-A vector in `Dim`-dimensional space with coordinates of type `T`.
-A vector can be obtained by subtracting two [`Point`](@ref) objects.
-## Examples
-```julia
-A = Point(0.0, 0.0)
-B = Point(1.0, 0.0)
-v = B - A
-```
-### Notes
-- A `Vec` is a `SVector` from StaticArrays.jl
-- Type aliases are `Vec1`, `Vec2`, `Vec3`, `Vec1f`, `Vec2f`, `Vec3f`
-"""
-const Vec = SVector
-
-# type aliases for convenience
-const Vec1  = Vec{1,Float64}
-const Vec2  = Vec{2,Float64}
-const Vec3  = Vec{3,Float64}
-const Vec1f = Vec{1,Float32}
-const Vec2f = Vec{2,Float32}
-const Vec3f = Vec{3,Float32}
-
-export Point,Point1D, Point2D, Point3D
-
-
-include("point.jl")
-
-
-# include("line.jl")
-# include("plane.jl")
-
-# include("face.jl")
-
-
-# 看ENigMA，它有个CGeoVertexList类，就是给出所有点列的类，
-# 然后三角形、四边形等都是它的子类
-
-
-abstract type abstractElement end
-
-abstract type Element{Dim} <: abstractElement end
+# end
 
 # """
 # 三角形
@@ -204,9 +111,23 @@ struct mesh
     elements::Vector{Element}
 
 
-#   edges
-#   faces
+    #   edges
+    #   faces
 end
 
 
 end
+
+
+
+
+
+
+# include("line.jl")
+# include("plane.jl")
+
+# include("face.jl")
+
+
+# 看ENigMA，它有个CGeoVertexList类，就是给出所有点列的类，
+# 然后三角形、四边形等都是它的派生类
